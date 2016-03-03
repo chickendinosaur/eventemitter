@@ -54,16 +54,16 @@ eventemitter.addEventListener('bang', function(e, payload) {
     console.log(`Data: ${payload}`);
 });
 
-// emitEvent is meant to take an Event object which should be extended
+// triggerEvent is meant to take an Event object which should be extended
 // for a custom event.
 
 let payload = {
     city: 'Gotham'
 };  
 
-eventemitter.emitEvent(ev, payload);
+eventemitter.triggerEvent(ev, payload);
 eventemitter.removeAllEventListeners('bang');
-eventemitter.emitEvent(ev);
+eventemitter.triggerEvent(ev);
       
 @class EventEmitter
 @constructor
@@ -87,10 +87,10 @@ EventEmitter.prototype = {
     /**
     Execute all handlers tied to the emitted event type.
     
-    @method emitEvent
+    @method triggerEvent
     @param {object} event - Event object that contains a the type of event along with other event data.
     */
-    emitEvent: function emitEvent(event) {
+    triggerEvent: function triggerEvent(event) {
         var eventHandlers = this._eventListeners[event.type];
 
         if (eventHandlers !== undefined) {
@@ -197,3 +197,10 @@ EventEmitter.prototype = {
         this._eventListeners = null;
     }
 };
+
+/**
+Alias of addEventListener.
+
+@method on
+*/
+EventEmitter.prototype.on = EventEmitter.prototype.addEventListener;

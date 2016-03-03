@@ -54,16 +54,16 @@ eventemitter.addEventListener('bang', function(e, payload) {
     console.log(`Data: ${payload}`);
 });
 
-// emitEvent is meant to take an Event object which should be extended
+// triggerEvent is meant to take an Event object which should be extended
 // for a custom event.
 
 let payload = {
     city: 'Gotham'
 };  
 
-eventemitter.emitEvent(ev, payload);
+eventemitter.triggerEvent(ev, payload);
 eventemitter.removeAllEventListeners('bang');
-eventemitter.emitEvent(ev);
+eventemitter.triggerEvent(ev);
 ```
 ---  
 

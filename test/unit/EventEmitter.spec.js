@@ -17,6 +17,7 @@ describe('EventEmitter', function() {
     var count2 = 0;
     // Object to test event.target and this against.
     function testScope() {}
+
     function testScope2() {}
 
     var ev1 = new CountEvent('count');
@@ -42,6 +43,13 @@ describe('EventEmitter', function() {
             ee.addEventListener('count', function() {});
             ee.addEventListener('count', handler1);
             expect(ee._eventListeners['count'].length).toBe(2);
+        });
+    });
+
+    describe('on', function() {
+        it('Provides an alias to addEventListener.', function() {
+            ee.on('count', function() {});
+            expect(typeof ee._eventListeners['count']).toBe('function');
         });
     });
 
@@ -73,25 +81,25 @@ describe('EventEmitter', function() {
         });
     });
 
-    describe('emitEvent', function() {
+    describe('triggerEvent', function() {
         it('Test base event propteries', function() {
             ee.addEventListener('count', function(event) {
                 expect(this).toEqual(ee);
                 expect(event.target).toEqual(testScope2);
                 expect(event.type).toBe('count');
             });
-            ee.emitEvent(ev1);
+            ee.triggerEvent(ev1);
         });
         it('Execute listeners when only one for an event.', function() {
             ee.addEventListener('count', handler1);
-            ee.emitEvent(ev1);
+            ee.triggerEvent(ev1);
             expect(count).toBe(1);
             expect(count2).toBe(10);
         });
         it('Execute all listeners when more than one for an event.', function() {
             ee.addEventListener('count', handler1);
             ee.addEventListener('count', handler1);
-            ee.emitEvent(ev1);
+            ee.triggerEvent(ev1);
             expect(count).toBe(2);
             expect(count2).toBe(10);
         });
