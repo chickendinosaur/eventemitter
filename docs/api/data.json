@@ -1,0 +1,232 @@
+{
+    "project": {},
+    "files": {
+        "src\\Event.js": {
+            "name": "src\\Event.js",
+            "modules": {},
+            "classes": {
+                "Event": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\EventEmitter.js": {
+            "name": "src\\EventEmitter.js",
+            "modules": {},
+            "classes": {
+                "EventEmitter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Event": {
+            "name": "Event",
+            "shortname": "Event",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\Event.js",
+            "line": 28,
+            "example": [
+                " \nimport Event from '@chickendinosaur/eventemitter/Event';\n\nconst pauseEvent = new Event('pause');\nconst errorEvent = new Event(404);"
+            ],
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String|number"
+                }
+            ]
+        },
+        "EventEmitter": {
+            "name": "EventEmitter",
+            "shortname": "EventEmitter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\EventEmitter.js",
+            "line": 28,
+            "example": [
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`this = ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\n// emitEvent is meant to take an Event object which should be extended\n// for a custom event.\n  \neventemitter.emitEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.emitEvent(ev);"
+            ],
+            "is_constructor": 1
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "src\\Event.js",
+            "line": 1,
+            "license": "The MIT License (MIT)\n\nCopyright (c) 2016 John Pittman\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 40,
+            "description": "Id of the event.",
+            "itemtype": "property",
+            "name": "type",
+            "type": "{string|number}",
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 48,
+            "description": "Owner of the event.",
+            "itemtype": "property",
+            "name": "target",
+            "type": "{object}",
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 58,
+            "description": "Used for object pooling.",
+            "itemtype": "method",
+            "name": "init",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "",
+                    "type": "String|number"
+                }
+            ],
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 68,
+            "description": "Used for object pooling.",
+            "itemtype": "method",
+            "name": "release",
+            "class": "Event"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 1,
+            "license": "The MIT License (MIT)\n\nCopyright (c) 2016 John Pittman\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 67,
+            "description": "Contains event keys mapped to listeners.",
+            "itemtype": "property",
+            "name": "_eventListeners",
+            "type": "{object}",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 77,
+            "description": "Execute all handlers tied to the emitted event type.",
+            "itemtype": "method",
+            "name": "emitEvent",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "- Event object that contains a the type of event along with other event data.",
+                    "type": "Object"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 100,
+            "description": "Adds a single event handler to the handlers container of the event type.\nCreates and new handlers container (array) if there has not been any handlers added to the event yet.",
+            "itemtype": "method",
+            "name": "addEventListener",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- Type key.",
+                    "type": "String|number"
+                },
+                {
+                    "name": "handler",
+                    "description": "- Handler callback.",
+                    "type": "Function"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 122,
+            "description": "Removes a single event handler from the handlers container of the event type.",
+            "itemtype": "method",
+            "name": "removeEventListener",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- Type key.",
+                    "type": "String|number"
+                },
+                {
+                    "name": "handler",
+                    "description": "- Handler reference.",
+                    "type": "Function"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 149,
+            "description": "Removes all handler callbacks from a single event.",
+            "itemtype": "method",
+            "name": "removeAllEventListeners",
+            "params": [
+                {
+                    "name": "type",
+                    "description": "- Event name.",
+                    "type": "String"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 172,
+            "description": "Used for object pooling.",
+            "itemtype": "method",
+            "name": "init",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 181,
+            "description": "Used for object pooling.",
+            "itemtype": "method",
+            "name": "release",
+            "class": "EventEmitter"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "unknown tag: license",
+            "line": " src\\Event.js:1"
+        },
+        {
+            "message": "unknown tag: license",
+            "line": " src\\EventEmitter.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src\\Event.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " src\\EventEmitter.js:1"
+        }
+    ]
+}
