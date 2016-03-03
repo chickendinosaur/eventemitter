@@ -55,7 +55,7 @@
             "file": "src\\EventEmitter.js",
             "line": 28,
             "example": [
-                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \ncomicEvent.payload = {\n    city: 'Gotham'\n};  \n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`this = ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n    console.log(`Data: ${e.payload}`);\n});\n\n// emitEvent is meant to take an Event object which should be extended\n// for a custom event.\n  \neventemitter.emitEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.emitEvent(ev);"
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \n\neventemitter.addEventListener('bang', function(e, payload) {\n    console.log(`this = ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n    console.log(`Data: ${payload}`);\n});\n\n// emitEvent is meant to take an Event object which should be extended\n// for a custom event.\n\nlet payload = {\n    city: 'Gotham'\n};  \n\neventemitter.emitEvent(ev, payload);\neventemitter.removeAllEventListeners('bang');\neventemitter.emitEvent(ev);"
             ],
             "is_constructor": 1
         }
@@ -117,7 +117,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 71,
+            "line": 72,
             "description": "Contains event keys mapped to listeners.",
             "itemtype": "property",
             "name": "_eventListeners",
@@ -126,7 +126,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 81,
+            "line": 82,
             "description": "Execute all handlers tied to the emitted event type.",
             "itemtype": "method",
             "name": "emitEvent",
@@ -141,7 +141,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 104,
+            "line": 105,
             "description": "Adds a single event handler to the handlers container of the event type.\nCreates and new handlers container (array) if there has not been any handlers added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -161,7 +161,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 126,
+            "line": 127,
             "description": "Removes a single event handler from the handlers container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -181,7 +181,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 153,
+            "line": 154,
             "description": "Removes all handler callbacks from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -196,7 +196,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 176,
+            "line": 177,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -204,7 +204,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 185,
+            "line": 186,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "release",

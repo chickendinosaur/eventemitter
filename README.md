@@ -45,22 +45,23 @@ const comicEvent = new ComicEvent('comic');
 comicEvent.superhero = 'Batman';  
 comicEvent.sidekick = 'Robin';
 comicEvent.target = window || this;  
-comicEvent.payload = {
-    city: 'Gotham'
-};  
 
-eventemitter.addEventListener('bang', function(e) {
+eventemitter.addEventListener('bang', function(e, payload) {
     console.log(`this = ${this}`);
     console.log(`Event: ${e.type}`);
     console.log(`Event target: ${e.target}`);
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
-    console.log(`Data: ${e.payload}`);
+    console.log(`Data: ${payload}`);
 });
 
 // emitEvent is meant to take an Event object which should be extended
 // for a custom event.
-  
-eventemitter.emitEvent(ev);
+
+let payload = {
+    city: 'Gotham'
+};  
+
+eventemitter.emitEvent(ev, payload);
 eventemitter.removeAllEventListeners('bang');
 eventemitter.emitEvent(ev);
 ```
