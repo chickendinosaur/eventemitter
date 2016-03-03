@@ -187,11 +187,14 @@ EventEmitter.prototype = {
     eventListenerCount: function eventListenerCount(type) {
         var eventListeners = this._eventListeners[type];
 
-        if (eventListeners === undefined) {
-            return 0;
+        if (typeof eventListeners === 'function') {
+            return 1;
+        }
+        if (Object.prototype.toString.call(eventListeners) === '[object Array]') {
+            return eventListeners.length;
         }
 
-        return eventListeners.length;
+        return 0;
     },
 
     /**

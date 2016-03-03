@@ -54,10 +54,17 @@ describe('EventEmitter', function() {
     });
 
     describe('eventListenerCount', function() {
-        it('Returns the number of listeners for an event.', function() {
+        it('Returns the number of listeners if type is Array.', function() {
             ee.addEventListener('count', function() {});
             ee.addEventListener('count', function() {});
             expect(ee.eventListenerCount('count')).toBe(2);
+        });
+        it('Returns the number of listeners if type is Function.', function() {
+            ee.addEventListener('count', function() {});
+            expect(ee.eventListenerCount('count')).toBe(1);
+        });
+        it('Returns the number of listeners if type is undefined.', function() {
+            expect(ee.eventListenerCount('count')).toBe(0);
         });
     });
 
