@@ -54,6 +54,8 @@ eventemitter.addEventListener('bang', function(e, payload) {
     console.log(`Data: ${payload}`);
 });
 
+console.log(`Listener count: ${eventemitter.eventListenerCount('comic')}`);
+
 let payload = {
     city: 'Gotham'
 };  
