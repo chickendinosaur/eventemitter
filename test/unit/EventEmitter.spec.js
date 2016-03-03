@@ -53,6 +53,14 @@ describe('EventEmitter', function() {
         });
     });
 
+    describe('eventListenerCount', function() {
+        it('Returns the number of listeners for an event.', function() {
+            ee.addEventListener('count', function() {});
+            ee.addEventListener('count', function() {});
+            expect(ee.eventListenerCount('count')).toBe(2);
+        });
+    });
+
     describe('removeEventListener', function() {
         it('Resets event handlers for an event back to undefined on one listener available.', function() {
             ee.addEventListener('count', function() {});

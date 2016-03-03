@@ -85,10 +85,10 @@ function EventEmitter() {
 
 EventEmitter.prototype = {
     /**
-    Execute all handlers tied to the emitted event type.
+    Execute all event listeners tied to the emitted event type.
     
     @method triggerEvent
-    @param {object} event - Event object that contains a the type of event along with other event data.
+    @param {Event|object} event
     */
     triggerEvent: function triggerEvent(event) {
         var eventHandlers = this._eventListeners[event.type];
@@ -108,47 +108,47 @@ EventEmitter.prototype = {
     },
 
     /**
-    Adds a single event handler to the handlers container of the event type.
-    Creates and new handlers container (array) if there has not been any handlers added to the event yet.
+    Adds a single event callback to the listeners container of the event type.
+    Creates and new callbacks container (array) if there has not been any callbacks added to the event yet.
     
     @method addEventListener
-    @param {string|number} type - Type key.
-    @param {function} handler - Handler callback.
+    @param {string|number} type
+    @param {function} callback
     */
-    addEventListener: function addEventListener(type, handler) {
+    addEventListener: function addEventListener(type, callback) {
         var eventHandlers = this._eventListeners[type];
 
-        // Create handler container on the fly if there isn't one.
-        // Only reference the handler if it's the first listener.
+        // Create listener container on the fly if there isn't one.
+        // Only reference the callback if it's the first listener.
         if (eventHandlers === undefined) {
-            eventHandlers = this._eventListeners[type] = handler;
+            eventHandlers = this._eventListeners[type] = callback;
         } else if (typeof eventHandlers === 'function') {
-            eventHandlers = this._eventListeners[type] = [eventHandlers, handler];
+            eventHandlers = this._eventListeners[type] = [eventHandlers, callback];
         } else {
-            eventHandlers.push(handler);
+            eventHandlers.push(callback);
         }
     },
 
     /**
-    Removes a single event handler from the handlers container of the event type.
+    Removes a single callback from the listener container of the event type.
      
     @method removeEventListener
-    @param {string|number} type - Type key.
-    @param {function} handler - Handler reference.
+    @param {string|number} type
+    @param {function} callback
     */
-    removeEventListener: function removeEventListener(type, handler) {
-        var eventHandlers = this._eventListeners[type];
+    removeEventListener: function removeEventListener(type, callback) {
+        var eventListeners = this._eventListeners[type];
 
-        if (eventHandlers !== undefined) {
-            if (typeof eventHandlers === 'function') {
+        if (eventListeners !== undefined) {
+            if (typeof eventListeners === 'function') {
                 this._eventListeners[type] = undefined;
             } else {
-                var n = eventHandlers.length;
+                var n = eventListeners.length;
                 var i = 0;
 
                 for (; i < n; i++) {
-                    if (handler === eventHandlers[i]) {
-                        eventHandlers.splice(i, 1);
+                    if (callback === eventListeners[i]) {
+                        eventListeners.splice(i, 1);
                         break;
                     }
                 }
@@ -157,26 +157,41 @@ EventEmitter.prototype = {
     },
 
     /**
-    Removes all handler callbacks from a single event.
+    Removes all listeners from a single event.
     
     @method removeAllEventListeners
     @param {string} type - Event name.
     */
     removeAllEventListeners: function removeAllEventListeners(type) {
-        var eventHandlers = this._eventListeners[type];
+        var eventListeners = this._eventListeners[type];
 
-        if (eventHandlers !== undefined) {
-            if (typeof eventHandlers === 'function') {
+        if (eventListeners !== undefined) {
+            if (typeof eventListeners === 'function') {
                 this._eventListeners[type] = undefined;
             } else {
-                var n = eventHandlers.length;
+                var n = eventListeners.length;
                 var i = 0;
 
                 for (; i < n; i++) {
-                    eventHandlers.pop();
+                    eventListeners.pop();
                 }
             }
         }
+    },
+
+    /**
+    Access the number of listeners for an event.
+      @method eventListenerCount
+    @param {string} type
+    */
+    eventListenerCount: function eventListenerCount(type) {
+        var eventListeners = this._eventListeners[type];
+
+        if (eventListeners === undefined) {
+            return 0;
+        }
+
+        return eventListeners.length;
     },
 
     /**
