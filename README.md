@@ -47,7 +47,7 @@ comicEvent.sidekick = 'Robin';
 comicEvent.target = window || this;  
 
 eventemitter.addEventListener('bang', function(e, payload) {
-    console.log(`this = ${this}`);
+    console.log(`Callback scope: ${this}`);
     console.log(`Event: ${e.type}`);
     console.log(`Event target: ${e.target}`);
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
