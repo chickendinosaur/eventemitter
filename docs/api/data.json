@@ -88,16 +88,7 @@
         },
         {
             "file": "src\\Event.js",
-            "line": 56,
-            "description": "Meant to hold any data that needs to be passed to listeners.",
-            "itemtype": "property",
-            "name": "payload",
-            "type": "{*}",
-            "class": "Event"
-        },
-        {
-            "file": "src\\Event.js",
-            "line": 66,
+            "line": 58,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -112,7 +103,7 @@
         },
         {
             "file": "src\\Event.js",
-            "line": 76,
+            "line": 68,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "release",

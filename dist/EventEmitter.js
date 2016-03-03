@@ -94,13 +94,13 @@ EventEmitter.prototype = {
 
         if (eventHandlers !== undefined) {
             if (typeof eventHandlers === 'function') {
-                eventHandlers.call(this, event);
+                eventHandlers.apply(this, arguments);
             } else {
                 var n = eventHandlers.length;
                 var i = 0;
 
                 for (; i < n; i++) {
-                    eventHandlers[i].call(this, event);
+                    eventHandlers[i].apply(this, arguments);
                 }
             }
         }
