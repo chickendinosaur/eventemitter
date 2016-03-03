@@ -49,9 +49,17 @@ export default function Event(type) {
     Owner of the event.
     
     @property target
-    @type {object}
+    @type {*}
     */
     this.target = null;
+
+    /**
+    Meant to hold any data that needs to be passed to listeners.
+    
+    @property payload
+    @type {*}
+    */
+    this.payload = null;
 }
 
 Event.prototype = {
@@ -73,5 +81,6 @@ Event.prototype = {
     release: function() {
         this.type = null;
         this.target = null;
+        this.payload = null;
     }
 };
