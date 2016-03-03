@@ -116,9 +116,9 @@ EventEmitter.prototype = {
         // Create listener container on the fly if there isn't one.
         // Only reference the callback if it's the first listener.
         if (eventHandlers === undefined) {
-            eventHandlers = this._eventListeners[type] = callback;
+            this._eventListeners[type] = callback;
         } else if (typeof eventHandlers === 'function') {
-            eventHandlers = this._eventListeners[type] = [eventHandlers, callback];
+            this._eventListeners[type] = [eventHandlers, callback];
         } else {
             eventHandlers.push(callback);
         }
