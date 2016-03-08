@@ -46,24 +46,19 @@ comicEvent.superhero = 'Batman';
 comicEvent.sidekick = 'Robin';
 comicEvent.target = window || this;  
 
-eventemitter.addEventListener('bang', function(e, payload) {
+eventemitter.addEventListener('bang', function(e) {
     console.log(`Callback scope: ${this}`);
     console.log(`Event: ${e.type}`);
     console.log(`Event target: ${e.target}`);
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
-    console.log(`Data: ${payload}`);
 });
 
-console.log(`Listener count: ${eventemitter.eventListenerCount('comic')}`);
-
-let payload = {
-    city: 'Gotham'
-};  
+console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
 
 // triggerEvent is meant to take an Event object which should be extended
-// for a custom event.
+// for a custom event or at least contain a 'type' property.
 
-eventemitter.triggerEvent(ev, payload);
+eventemitter.triggerEvent(ev);
 eventemitter.removeAllEventListeners('bang');
 eventemitter.triggerEvent(ev);
       
@@ -97,13 +92,13 @@ EventEmitter.prototype = {
 
         if (eventHandlers !== undefined) {
             if (typeof eventHandlers === 'function') {
-                eventHandlers.apply(this, arguments);
+                eventHandlers.call(this, event);
             } else {
                 var n = eventHandlers.length;
                 var i = 0;
 
                 for (; i < n; i++) {
-                    eventHandlers[i].apply(this, arguments);
+                    eventHandlers[i].call(this, event);
                 }
             }
         }
@@ -183,20 +178,21 @@ EventEmitter.prototype = {
 
     /**
     Access the number of listeners for an event.
-      @method eventListenerCount
+      @method getEventListenerCount
     @param {string} type
     */
-    eventListenerCount: function eventListenerCount(type) {
+    getEventListenerCount: function getEventListenerCount(type) {
         var eventListeners = this._eventListeners[type];
+
+        if (eventListeners === undefined) {
+            return 0;
+        }
 
         if (typeof eventListeners === 'function') {
             return 1;
         }
-        if (Object.prototype.toString.call(eventListeners) === '[object Array]') {
-            return eventListeners.length;
-        }
 
-        return 0;
+        return eventListeners.length;
     },
 
     /**
@@ -211,9 +207,9 @@ EventEmitter.prototype = {
     /**
     Used for object pooling.
      
-    @method release
+    @method dispose
     */
-    release: function release() {
+    dispose: function dispose() {
         this._eventListeners = null;
     }
 };

@@ -46,24 +46,19 @@ comicEvent.superhero = 'Batman';
 comicEvent.sidekick = 'Robin';
 comicEvent.target = window || this;  
 
-eventemitter.addEventListener('bang', function(e, payload) {
+eventemitter.addEventListener('bang', function(e) {
     console.log(`Callback scope: ${this}`);
     console.log(`Event: ${e.type}`);
     console.log(`Event target: ${e.target}`);
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
-    console.log(`Data: ${payload}`);
 });
 
-console.log(`Listener count: ${eventemitter.eventListenerCount('comic')}`);
-
-let payload = {
-    city: 'Gotham'
-};  
+console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
 
 // triggerEvent is meant to take an Event object which should be extended
-// for a custom event.
+// for a custom event or at least contain a 'type' property.
 
-eventemitter.triggerEvent(ev, payload);
+eventemitter.triggerEvent(ev);
 eventemitter.removeAllEventListeners('bang');
 eventemitter.triggerEvent(ev);
 ```

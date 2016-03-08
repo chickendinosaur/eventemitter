@@ -49,14 +49,6 @@ function Event(type) {
     @type {string|number}
     */
     this.type = type;
-
-    /**
-    Owner of the event.
-    
-    @property target
-    @type {*}
-    */
-    this.target = null;
 }
 
 Event.prototype = {
@@ -68,15 +60,5 @@ Event.prototype = {
     */
     init: function init(type) {
         this.type = type;
-    },
-
-    /**
-    Used for object pooling.
-     
-    @method release
-    */
-    release: function release() {
-        this.type = null;
-        this.target = null;
     }
 };

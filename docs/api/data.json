@@ -55,7 +55,7 @@
             "file": "src\\EventEmitter.js",
             "line": 28,
             "example": [
-                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \n\neventemitter.addEventListener('bang', function(e, payload) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n    console.log(`Data: ${payload}`);\n});\n\nconsole.log(`Listener count: ${eventemitter.eventListenerCount('comic')}`);\n\nlet payload = {\n    city: 'Gotham'\n};  \n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event.\n\neventemitter.triggerEvent(ev, payload);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);"
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);"
             ],
             "is_constructor": 1
         }
@@ -79,16 +79,7 @@
         },
         {
             "file": "src\\Event.js",
-            "line": 48,
-            "description": "Owner of the event.",
-            "itemtype": "property",
-            "name": "target",
-            "type": "{*}",
-            "class": "Event"
-        },
-        {
-            "file": "src\\Event.js",
-            "line": 58,
+            "line": 50,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -102,14 +93,6 @@
             "class": "Event"
         },
         {
-            "file": "src\\Event.js",
-            "line": 68,
-            "description": "Used for object pooling.",
-            "itemtype": "method",
-            "name": "release",
-            "class": "Event"
-        },
-        {
             "file": "src\\EventEmitter.js",
             "line": 1,
             "license": "The MIT License (MIT)\n\nCopyright (c) 2016 John Pittman\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
@@ -117,7 +100,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 74,
+            "line": 69,
             "description": "Contains event keys mapped to listeners.",
             "itemtype": "property",
             "name": "_eventListeners",
@@ -126,7 +109,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 84,
+            "line": 79,
             "description": "Execute all event listeners tied to the emitted event type.",
             "itemtype": "method",
             "name": "triggerEvent",
@@ -141,7 +124,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 107,
+            "line": 102,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -161,7 +144,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 129,
+            "line": 124,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -181,7 +164,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 156,
+            "line": 151,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -196,10 +179,10 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 179,
+            "line": 174,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
-            "name": "eventListenerCount",
+            "name": "getEventListenerCount",
             "params": [
                 {
                     "name": "type",
@@ -211,7 +194,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 198,
+            "line": 194,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -219,15 +202,15 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 207,
+            "line": 203,
             "description": "Used for object pooling.",
             "itemtype": "method",
-            "name": "release",
+            "name": "dispose",
             "class": "EventEmitter"
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 217,
+            "line": 213,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",
