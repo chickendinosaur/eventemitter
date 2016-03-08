@@ -109,7 +109,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 77,
+            "line": 78,
             "description": "Execute all event listeners tied to the emitted event type.",
             "itemtype": "method",
             "name": "triggerEvent",
@@ -124,7 +124,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 102,
+            "line": 103,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -144,7 +144,15 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 124,
+            "line": 125,
+            "description": "Alias of addEventListener.",
+            "itemtype": "method",
+            "name": "on",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 132,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -164,7 +172,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 152,
+            "line": 160,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -179,7 +187,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 176,
+            "line": 184,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -194,7 +202,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 196,
+            "line": 204,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -202,18 +210,10 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 205,
+            "line": 213,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",
-            "class": "EventEmitter"
-        },
-        {
-            "file": "src\\EventEmitter.js",
-            "line": 215,
-            "description": "Alias of addEventListener.",
-            "itemtype": "method",
-            "name": "on",
             "class": "EventEmitter"
         }
     ],
