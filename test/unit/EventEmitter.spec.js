@@ -15,13 +15,11 @@ describe('EventEmitter', function() {
     var ee = new EventEmitter();
     var count = 0;
     var count2 = 0;
-    // Object to test event.target and this against.
     function testScope() {}
 
     function testScope2() {}
 
     var ev1 = new CountEvent('count');
-    ev1.target = testScope2;
 
     var handler1 = function(e) {
         count += e.increment;
@@ -100,7 +98,6 @@ describe('EventEmitter', function() {
         it('Test base event propteries', function() {
             ee.addEventListener('count', function(event) {
                 expect(this).toEqual(ee);
-                expect(event.target).toEqual(testScope2);
                 expect(event.type).toBe('count');
             });
             ee.triggerEvent(ev1);

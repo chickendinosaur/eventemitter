@@ -55,7 +55,7 @@
             "file": "src\\EventEmitter.js",
             "line": 28,
             "example": [
-                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\ncomicEvent.target = window || this;  \n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`Event target: ${e.target}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);"
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);"
             ],
             "is_constructor": 1
         }
@@ -100,7 +100,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 69,
+            "line": 67,
             "description": "Contains event keys mapped to listeners.",
             "itemtype": "property",
             "name": "_eventListeners",
@@ -109,7 +109,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 79,
+            "line": 77,
             "description": "Execute all event listeners tied to the emitted event type.",
             "itemtype": "method",
             "name": "triggerEvent",
@@ -124,7 +124,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 102,
+            "line": 100,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -144,7 +144,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 124,
+            "line": 122,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -164,7 +164,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 151,
+            "line": 149,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -179,7 +179,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 174,
+            "line": 172,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -194,7 +194,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 194,
+            "line": 192,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -202,7 +202,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 203,
+            "line": 201,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",
@@ -210,7 +210,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 213,
+            "line": 211,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",

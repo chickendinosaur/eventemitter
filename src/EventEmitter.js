@@ -44,12 +44,10 @@ const eventemitter = new EventEmitter();
 const comicEvent = new ComicEvent('comic');
 comicEvent.superhero = 'Batman';  
 comicEvent.sidekick = 'Robin';
-comicEvent.target = window || this;  
 
 eventemitter.addEventListener('bang', function(e) {
     console.log(`Callback scope: ${this}`);
     console.log(`Event: ${e.type}`);
-    console.log(`Event target: ${e.target}`);
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
