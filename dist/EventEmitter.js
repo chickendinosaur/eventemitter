@@ -95,8 +95,10 @@ EventEmitter.prototype = {
                 var n = eventHandlers.length;
                 var i = 0;
 
-                for (; i < n; i++) {
+                for (; i < n;) {
                     eventHandlers[i].call(this, event);
+
+                    ++i;
                 }
             }
         }
@@ -138,14 +140,15 @@ EventEmitter.prototype = {
             if (typeof eventListeners === 'function') {
                 this._eventListeners[type] = undefined;
             } else {
-                var n = eventListeners.length;
-                var i = 0;
+                var i = eventListeners.length;
 
-                for (; i < n; i++) {
+                for (; i > 0;) {
                     if (callback === eventListeners[i]) {
                         eventListeners.splice(i, 1);
                         break;
                     }
+
+                    --i;
                 }
             }
         }
@@ -164,11 +167,12 @@ EventEmitter.prototype = {
             if (typeof eventListeners === 'function') {
                 this._eventListeners[type] = undefined;
             } else {
-                var n = eventListeners.length;
-                var i = 0;
+                var i = eventListeners.length;
 
-                for (; i < n; i++) {
+                for (; i > 0;) {
                     eventListeners.pop();
+
+                    --i;
                 }
             }
         }

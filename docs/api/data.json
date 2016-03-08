@@ -124,7 +124,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 100,
+            "line": 102,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -144,7 +144,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 122,
+            "line": 124,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -164,7 +164,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 149,
+            "line": 152,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -179,7 +179,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 172,
+            "line": 176,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -194,7 +194,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 192,
+            "line": 196,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -202,7 +202,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 201,
+            "line": 205,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",
@@ -210,7 +210,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 211,
+            "line": 215,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",
