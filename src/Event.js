@@ -46,14 +46,14 @@ export default function Event(type) {
     this.type = type;
 }
 
-Event.prototype = {
-    /**
-    Used for object pooling.
+Event.prototype.constructor = Event;
+
+/**
+Used for object pooling.
     
-    @method init
-    @param {string|number} type
-    */
-    init: function(type) {
-        this.type = type;
-    }
+@method init
+@param {string|number} type
+*/
+Event.prototype.init = function(type) {
+    this.type = type;
 };

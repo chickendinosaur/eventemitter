@@ -79,7 +79,7 @@
         },
         {
             "file": "src\\Event.js",
-            "line": 50,
+            "line": 51,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",

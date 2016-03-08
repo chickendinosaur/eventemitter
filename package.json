@@ -1,6 +1,6 @@
 {
   "name": "@chickendinosaur/eventemitter",
-  "version": "10.0.3",
+  "version": "10.0.4",
   "description": "Slings events.",
   "files": [
     "dist"
