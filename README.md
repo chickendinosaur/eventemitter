@@ -22,7 +22,12 @@ npm install @chickendinosaur/eventemitter
 import Event from '@chickendinosaur/eventemitter/Event';
 
 const pauseEvent = new Event('pause');
-const errorEvent = new Event(404);
+pauseEvent.target = window || this;
+
+pauseEvent.dispose();
+
+pauseEvent.init('pause');
+pauseEvent.target = window || this;
 ```
 
 ### EventEmitter

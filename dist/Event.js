@@ -30,7 +30,12 @@ SOFTWARE.
 import Event from '@chickendinosaur/eventemitter/Event';
 
 const pauseEvent = new Event('pause');
-const errorEvent = new Event(404);
+pauseEvent.target = window || this;
+
+pauseEvent.dispose();
+
+pauseEvent.init('pause');
+pauseEvent.target = window || this;
 
 @class Event
 @constructor
@@ -43,22 +48,31 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = Event;
 function Event(type) {
     /**
-    Id of the event.
-    
     @property type
     @type {string|number}
     */
     this.type = type;
+
+    /**
+    @property target
+    @type {object}
+    */
+    this.target = null;
 }
 
 Event.prototype.constructor = Event;
 
 /**
-Used for object pooling.
-    
 @method init
 @param {string|number} type
 */
 Event.prototype.init = function (type) {
     this.type = type;
+};
+
+/**
+@method dispose
+*/
+Event.prototype.dispose = function () {
+    this.target = null;
 };

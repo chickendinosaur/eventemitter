@@ -71,6 +71,12 @@ export default function EventEmitter() {
     @type {object}
     */
     this._eventListeners = {};
+
+    /**
+    @property _eventCallbacks
+    @type {array}
+    */
+    this._eventCallbacks = null;
 }
 
 EventEmitter.prototype.constructor = EventEmitter;
@@ -82,20 +88,31 @@ Execute all event listeners tied to the emitted event type.
 @param {Event|object} event
 */
 EventEmitter.prototype.triggerEvent = function(event) {
-    const eventHandlers = this._eventListeners[event.type];
+    const eventListeners = this._eventListeners[event.type];
 
-    if (eventHandlers !== undefined) {
-        if (typeof eventHandlers === 'function') {
-            eventHandlers.call(this, event);
+    if (eventListeners !== undefined) {
+        if (typeof eventListeners === 'function') {
+            eventListeners.call(this, event);
         } else {
-            const n = eventHandlers.length;
-            let i = 0;
+            let i = eventListeners.length;
 
-            for (; i < n;) {
-                eventHandlers[i].call(this, event);
+            while (i > 0) {
+                --i;
 
-                ++i;
+                eventListeners[i].call(this, event);
             }
+        }
+    }
+
+    // Run listeners that will get passed every event.
+    if (this._eventCallbacks !== null) {
+        const eventCallbacks = this._eventCallbacks;
+        let i = eventCallbacks.length;
+
+        while (i > 0) {
+            --i;
+
+            eventCallbacks[i].call(this, event);
         }
     }
 };
@@ -109,16 +126,20 @@ Creates and new callbacks container (array) if there has not been any callbacks 
 @param {function} callback
 */
 EventEmitter.prototype.addEventListener = function(type, callback) {
-    let eventHandlers = this._eventListeners[type];
-
-    // Create listener container on the fly if there isn't one.
-    // Only reference the callback if it's the first listener.
-    if (eventHandlers === undefined) {
-        this._eventListeners[type] = callback;
-    } else if (typeof eventHandlers === 'function') {
-        this._eventListeners[type] = [eventHandlers, callback];
+    if (callback === undefined) {
+        this._addEventCallback(type);
     } else {
-        eventHandlers.push(callback);
+        let eventHandlers = this._eventListeners[type];
+
+        // Create listener container on the fly if there isn't one.
+        // Only reference the callback if it's the first listener.
+        if (eventHandlers === undefined) {
+            this._eventListeners[type] = callback;
+        } else if (typeof eventHandlers === 'function') {
+            this._eventListeners[type] = [eventHandlers, callback];
+        } else {
+            eventHandlers.push(callback);
+        }
     }
 };
 
@@ -137,21 +158,25 @@ Removes a single callback from the listener container of the event type.
 @param {function} callback
 */
 EventEmitter.prototype.removeEventListener = function(type, callback) {
-    const eventListeners = this._eventListeners[type];
+    if (callback === undefined) {
+        this._removeEventCallback(type);
+    } else {
+        const eventListeners = this._eventListeners[type];
 
-    if (eventListeners !== undefined) {
-        if (typeof eventListeners === 'function') {
-            this._eventListeners[type] = undefined;
-        } else {
-            let i = eventListeners.length;
+        if (eventListeners !== undefined) {
+            if (typeof eventListeners === 'function') {
+                this._eventListeners[type] = undefined;
+            } else {
+                let i = eventListeners.length;
 
-            for (; i > 0;) {
-                if (callback === eventListeners[i]) {
-                    eventListeners.splice(i, 1);
-                    break;
+                while (i > 0) {
+                    --i;
+
+                    if (callback === eventListeners[i]) {
+                        eventListeners.splice(i, 1);
+                        break;
+                    }
                 }
-
-                --i;
             }
         }
     }
@@ -164,18 +189,18 @@ Removes all listeners from a single event.
 @param {string} type - Event name.
 */
 EventEmitter.prototype.removeAllEventListeners = function(type) {
-    const eventListeners = this._eventListeners[type];
+    if (type === undefined) {
+        this._removeAllEventCallbacks();
+    } else {
+        const eventListeners = this._eventListeners[type];
 
-    if (eventListeners !== undefined) {
-        if (typeof eventListeners === 'function') {
-            this._eventListeners[type] = undefined;
-        } else {
-            let i = eventListeners.length;
-
-            for (; i > 0;) {
-                eventListeners.pop();
-
-                --i;
+        if (eventListeners !== undefined) {
+            if (typeof eventListeners === 'function') {
+                this._eventListeners[type] = undefined;
+            } else {
+                while (eventListeners.length > 0) {
+                    eventListeners.pop();
+                }
             }
         }
     }
@@ -188,17 +213,75 @@ Access the number of listeners for an event.
 @param {string} type
 */
 EventEmitter.prototype.getEventListenerCount = function(type) {
-    const eventListeners = this._eventListeners[type];
+    let result = 0;
 
-    if (eventListeners === undefined) {
-        return 0;
+    if (type === undefined) {
+        this._getEventCallbackCount();
+    } else {
+        const eventListeners = this._eventListeners[type];
+
+        if (typeof eventListeners === 'function') {
+            result = 1;
+        } else if (eventListeners !== undefined) {
+            result = eventListeners.length;
+        }
     }
 
-    if (typeof eventListeners === 'function') {
-        return 1;
+    return result;
+};
+
+/**
+@method _addEventCallback
+@param {function} callback
+*/
+EventEmitter.prototype._addEventCallback = function(callback) {
+    if (this._eventCallbacks === null) {
+        this._eventCallbacks = [];
     }
 
-    return eventListeners.length;
+    this._eventCallbacks.push(callback);
+};
+
+/**
+@method _removeEventCallback
+@param {function} callback
+*/
+EventEmitter.prototype._removeEventCallback = function(callback) {
+    const eventCallbacks = this._eventCallbacks;
+    let i = eventCallbacks.length;
+
+    while (i > 0) {
+        --i;
+
+        if (callback === eventCallbacks[i]) {
+            eventCallbacks.splice(i, 1);
+            break;
+        }
+    }
+};
+
+/**
+@method _removeAllEventCallbacks
+*/
+EventEmitter.prototype._removeAllEventCallbacks = function() {
+    const eventCallbacks = this._eventCallbacks;
+
+    while (eventCallbacks.length > 0) {
+        eventCallbacks.pop();
+    }
+};
+
+/**
+@method _getEventCallbackCount
+*/
+EventEmitter.prototype._getEventCallbackCount = function() {
+    let result = 0;
+
+    if (this._eventCallbacks !== null) {
+        result = this._eventCallbacks.length;
+    }
+
+    return result;
 };
 
 /**

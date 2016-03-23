@@ -33,7 +33,7 @@
             "file": "src\\Event.js",
             "line": 28,
             "example": [
-                " \nimport Event from '@chickendinosaur/eventemitter/Event';\n\nconst pauseEvent = new Event('pause');\nconst errorEvent = new Event(404);"
+                " \nimport Event from '@chickendinosaur/eventemitter/Event';\n\nconst pauseEvent = new Event('pause');\npauseEvent.target = window || this;\n\npauseEvent.dispose();\n\npauseEvent.init('pause');\npauseEvent.target = window || this;"
             ],
             "is_constructor": 1,
             "params": [
@@ -70,8 +70,7 @@
         },
         {
             "file": "src\\Event.js",
-            "line": 40,
-            "description": "Id of the event.",
+            "line": 45,
             "itemtype": "property",
             "name": "type",
             "type": "{string|number}",
@@ -80,7 +79,14 @@
         {
             "file": "src\\Event.js",
             "line": 51,
-            "description": "Used for object pooling.",
+            "itemtype": "property",
+            "name": "target",
+            "type": "{object}",
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 60,
             "itemtype": "method",
             "name": "init",
             "params": [
@@ -90,6 +96,13 @@
                     "type": "String|number"
                 }
             ],
+            "class": "Event"
+        },
+        {
+            "file": "src\\Event.js",
+            "line": 68,
+            "itemtype": "method",
+            "name": "dispose",
             "class": "Event"
         },
         {
@@ -109,7 +122,15 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 78,
+            "line": 75,
+            "itemtype": "property",
+            "name": "_eventCallbacks",
+            "type": "{array}",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 84,
             "description": "Execute all event listeners tied to the emitted event type.",
             "itemtype": "method",
             "name": "triggerEvent",
@@ -124,7 +145,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 103,
+            "line": 120,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -144,7 +165,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 125,
+            "line": 146,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",
@@ -152,7 +173,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 132,
+            "line": 153,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -172,7 +193,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 160,
+            "line": 185,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -187,7 +208,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 184,
+            "line": 209,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -202,7 +223,49 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 204,
+            "line": 233,
+            "itemtype": "method",
+            "name": "_addEventCallback",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 245,
+            "itemtype": "method",
+            "name": "_removeEventCallback",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 263,
+            "itemtype": "method",
+            "name": "_removeAllEventCallbacks",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 274,
+            "itemtype": "method",
+            "name": "_getEventCallbackCount",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 287,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -210,7 +273,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 213,
+            "line": 296,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",
