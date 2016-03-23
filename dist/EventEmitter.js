@@ -112,12 +112,17 @@ EventEmitter.prototype.triggerEvent = function (event) {
     // Run listeners that will get passed every event.
     if (this._eventCallbacks !== null) {
         var eventCallbacks = this._eventCallbacks;
-        var i = eventCallbacks.length;
 
-        while (i > 0) {
-            --i;
+        if (typeof eventCallbacks === 'function') {
+            eventCallbacks.call(this, event);
+        } else {
+            var i = eventCallbacks.length;
 
-            eventCallbacks[i].call(this, event);
+            while (i > 0) {
+                --i;
+
+                eventCallbacks[i].call(this, event);
+            }
         }
     }
 };
@@ -240,11 +245,15 @@ EventEmitter.prototype.getEventListenerCount = function (type) {
 @param {function} callback
 */
 EventEmitter.prototype._addEventCallback = function (callback) {
-    if (this._eventCallbacks === null) {
-        this._eventCallbacks = [];
-    }
+    var eventCallbacks = this._eventCallbacks;
 
-    this._eventCallbacks.push(callback);
+    if (eventCallbacks === null) {
+        this._eventCallbacks = callback;
+    } else if (typeof eventCallbacks === 'function') {
+        this._eventCallbacks = [eventCallbacks, callback];
+    } else {
+        eventCallbacks.push(callback);
+    }
 };
 
 /**
@@ -253,14 +262,21 @@ EventEmitter.prototype._addEventCallback = function (callback) {
 */
 EventEmitter.prototype._removeEventCallback = function (callback) {
     var eventCallbacks = this._eventCallbacks;
-    var i = eventCallbacks.length;
 
-    while (i > 0) {
-        --i;
+    if (eventCallbacks !== null) {
+        if (typeof eventCallbacks === 'function') {
+            this._eventCallbacks = null;
+        } else {
+            var i = eventCallbacks.length;
 
-        if (callback === eventCallbacks[i]) {
-            eventCallbacks.splice(i, 1);
-            break;
+            while (i > 0) {
+                --i;
+
+                if (callback === eventCallbacks[i]) {
+                    eventCallbacks.splice(i, 1);
+                    break;
+                }
+            }
         }
     }
 };
@@ -271,8 +287,14 @@ EventEmitter.prototype._removeEventCallback = function (callback) {
 EventEmitter.prototype._removeAllEventCallbacks = function () {
     var eventCallbacks = this._eventCallbacks;
 
-    while (eventCallbacks.length > 0) {
-        eventCallbacks.pop();
+    if (eventCallbacks !== null) {
+        if (typeof eventCallbacks === 'function') {
+            this._eventCallbacks = null;
+        } else {
+            while (eventCallbacks.length > 0) {
+                eventCallbacks.pop();
+            }
+        }
     }
 };
 

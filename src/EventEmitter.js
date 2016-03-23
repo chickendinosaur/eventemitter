@@ -107,12 +107,17 @@ EventEmitter.prototype.triggerEvent = function(event) {
     // Run listeners that will get passed every event.
     if (this._eventCallbacks !== null) {
         const eventCallbacks = this._eventCallbacks;
-        let i = eventCallbacks.length;
 
-        while (i > 0) {
-            --i;
+        if (typeof eventCallbacks === 'function') {
+            eventCallbacks.call(this, event);
+        } else {
+            let i = eventCallbacks.length;
 
-            eventCallbacks[i].call(this, event);
+            while (i > 0) {
+                --i;
+
+                eventCallbacks[i].call(this, event);
+            }
         }
     }
 };
@@ -235,11 +240,15 @@ EventEmitter.prototype.getEventListenerCount = function(type) {
 @param {function} callback
 */
 EventEmitter.prototype._addEventCallback = function(callback) {
-    if (this._eventCallbacks === null) {
-        this._eventCallbacks = [];
-    }
+    const eventCallbacks = this._eventCallbacks;
 
-    this._eventCallbacks.push(callback);
+    if (eventCallbacks === null) {
+        this._eventCallbacks = callback;
+    } else if (typeof eventCallbacks === 'function') {
+        this._eventCallbacks = [eventCallbacks, callback];
+    } else {
+        eventCallbacks.push(callback);
+    }
 };
 
 /**
@@ -248,14 +257,21 @@ EventEmitter.prototype._addEventCallback = function(callback) {
 */
 EventEmitter.prototype._removeEventCallback = function(callback) {
     const eventCallbacks = this._eventCallbacks;
-    let i = eventCallbacks.length;
 
-    while (i > 0) {
-        --i;
+    if (eventCallbacks !== null) {
+        if (typeof eventCallbacks === 'function') {
+            this._eventCallbacks = null;
+        } else {
+            let i = eventCallbacks.length;
 
-        if (callback === eventCallbacks[i]) {
-            eventCallbacks.splice(i, 1);
-            break;
+            while (i > 0) {
+                --i;
+
+                if (callback === eventCallbacks[i]) {
+                    eventCallbacks.splice(i, 1);
+                    break;
+                }
+            }
         }
     }
 };
@@ -266,8 +282,14 @@ EventEmitter.prototype._removeEventCallback = function(callback) {
 EventEmitter.prototype._removeAllEventCallbacks = function() {
     const eventCallbacks = this._eventCallbacks;
 
-    while (eventCallbacks.length > 0) {
-        eventCallbacks.pop();
+    if (eventCallbacks !== null) {
+        if (typeof eventCallbacks === 'function') {
+            this._eventCallbacks = null;
+        } else {
+            while (eventCallbacks.length > 0) {
+                eventCallbacks.pop();
+            }
+        }
     }
 };
 
@@ -300,4 +322,5 @@ Used for object pooling.
 */
 EventEmitter.prototype.dispose = function() {
     this._eventListeners = null;
+    this._eventCallbacks = null;
 };
