@@ -56,6 +56,10 @@ eventemitter.addEventListener('bang', function(e) {
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
+eventemitter.addEventListener(function(e) {
+    console.log(`Event type: ${e.type}`);
+});
+
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
 
 // triggerEvent is meant to take an Event object which should be extended
@@ -63,6 +67,8 @@ console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
 
 eventemitter.triggerEvent(ev);
 eventemitter.removeAllEventListeners('bang');
+eventemitter.triggerEvent(ev);
+eventemitter.removeAllEventListeners();
 eventemitter.triggerEvent(ev);
 ```
 ---  
