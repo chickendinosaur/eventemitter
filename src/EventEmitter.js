@@ -65,8 +65,10 @@ console.log(`Listener count: ${eventemitter.getPipedEventListenerCount()}`);
 // for a custom event or at least contain a 'type' property.
 
 eventemitter.triggerEvent(ev);
+
 eventemitter.removeAllEventListeners('bang');
 eventemitter.triggerEvent(ev);
+
 eventemitter.unpipeAll();
 eventemitter.triggerEvent(ev);
       
