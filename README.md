@@ -64,14 +64,17 @@ eventemitter.pipe(function(e) {
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
+console.log(`Listener count: ${eventemitter.getPipedEventListenerCount()}`);
 
 // triggerEvent is meant to take an Event object which should be extended
 // for a custom event or at least contain a 'type' property.
 
 eventemitter.triggerEvent(ev);
+
 eventemitter.removeAllEventListeners('bang');
 eventemitter.triggerEvent(ev);
-eventemitter.removeAllEventListeners();
+
+eventemitter.unpipeAll();
 eventemitter.triggerEvent(ev);
 ```
 ---  
