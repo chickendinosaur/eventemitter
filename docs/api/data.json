@@ -145,7 +145,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 137,
+            "line": 139,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -165,7 +165,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 159,
+            "line": 161,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",
@@ -173,7 +173,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 166,
+            "line": 168,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -193,7 +193,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 194,
+            "line": 197,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -208,7 +208,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 214,
+            "line": 217,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -223,7 +223,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 232,
+            "line": 235,
             "itemtype": "method",
             "name": "pipe",
             "params": [
@@ -237,7 +237,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 248,
+            "line": 251,
             "itemtype": "method",
             "name": "unpipe",
             "params": [
@@ -251,21 +251,21 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 273,
+            "line": 277,
             "itemtype": "method",
             "name": "unpipeAll",
             "class": "EventEmitter"
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 290,
+            "line": 294,
             "itemtype": "method",
             "name": "getPipedEventListenerCount",
             "class": "EventEmitter"
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 305,
+            "line": 309,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -273,7 +273,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 314,
+            "line": 318,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",

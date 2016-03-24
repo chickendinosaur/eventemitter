@@ -106,12 +106,13 @@ EventEmitter.prototype.triggerEvent = function(event) {
         if (typeof eventListeners === 'function') {
             eventListeners.call(this, event);
         } else {
-            let i = eventListeners.length;
+            let n = eventListeners.length;
+            let i = 0;
 
-            while (i > 0) {
-                --i;
-
+            while (i < n) {
                 eventListeners[i].call(this, event);
+
+                ++i;
             }
         }
     }
@@ -123,12 +124,13 @@ EventEmitter.prototype.triggerEvent = function(event) {
         if (typeof pipedEventListeners === 'function') {
             pipedEventListeners.call(this, event);
         } else {
-            let i = pipedEventListeners.length;
+            let n = pipedEventListeners.length;
+            let i = 0;
 
-            while (i > 0) {
-                --i;
-
+            while (i < n) {
                 pipedEventListeners[i].call(this, event);
+
+                ++i;
             }
         }
     }
@@ -177,15 +179,16 @@ EventEmitter.prototype.removeEventListener = function(type, callback) {
         if (typeof eventListeners === 'function') {
             this._eventListeners[type] = undefined;
         } else {
-            let i = eventListeners.length;
+            let n = eventListeners.length;
+            let i = 0;
 
-            while (i > 0) {
-                --i;
-
+            while (i < n) {
                 if (callback === eventListeners[i]) {
                     eventListeners.splice(i, 1);
                     break;
                 }
+
+                ++i;
             }
         }
     }
@@ -256,15 +259,16 @@ EventEmitter.prototype.unpipe = function(callback) {
         if (typeof pipedEventListeners === 'function') {
             this._pipedEventListeners = null;
         } else {
-            let i = pipedEventListeners.length;
+            let n = pipedEventListeners.length;
+            let i = 0;
 
-            while (i > 0) {
-                --i;
-
+            while (i < n) {
                 if (callback === pipedEventListeners[i]) {
                     pipedEventListeners.splice(i, 1);
                     break;
                 }
+
+                ++i;
             }
         }
     }
