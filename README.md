@@ -56,8 +56,11 @@ eventemitter.addEventListener('bang', function(e) {
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
-eventemitter.addEventListener(function(e) {
-    console.log(`Event type: ${e.type}`);
+// Ability pipe all events to a listener.
+eventemitter.pipe(function(e) {
+    if(e.type === 'comic'){
+        console.log('Piped the ${e.type} event.');
+    }
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);

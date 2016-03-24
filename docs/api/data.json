@@ -55,7 +55,7 @@
             "file": "src\\EventEmitter.js",
             "line": 28,
             "example": [
-                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\neventemitter.addEventListener(function(e) {\n    console.log(`Event type: ${e.type}`);\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners();\neventemitter.triggerEvent(ev);"
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n    constructor(type) {\n        super(type);\n\n        this.superhero = 'The Nameless Man';\n        this.sidekick = null;\n    }\n}\n     \nconst eventemitter = new EventEmitter();\n  \nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';  \ncomicEvent.sidekick = 'Robin';\n\neventemitter.addEventListener('bang', function(e) {\n    console.log(`Callback scope: ${this}`);\n    console.log(`Event: ${e.type}`);\n    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\n// Ability pipe all events to a listener.\neventemitter.pipe(function(e) {\n    if(e.type === 'comic'){\n        console.log('Piped the ${e.type} event.');\n    }\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);\neventemitter.removeAllEventListeners();\neventemitter.triggerEvent(ev);"
             ],
             "is_constructor": 1
         }
@@ -113,7 +113,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 73,
+            "line": 76,
             "description": "Contains event keys mapped to listeners.",
             "itemtype": "property",
             "name": "_eventListeners",
@@ -122,15 +122,15 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 81,
+            "line": 84,
             "itemtype": "property",
-            "name": "_eventCallbacks",
+            "name": "_pipedEventListeners",
             "type": "{array}",
             "class": "EventEmitter"
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 90,
+            "line": 93,
             "description": "Execute all event listeners tied to the emitted event type.",
             "itemtype": "method",
             "name": "triggerEvent",
@@ -145,7 +145,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 131,
+            "line": 134,
             "description": "Adds a single event callback to the listeners container of the event type.\nCreates and new callbacks container (array) if there has not been any callbacks added to the event yet.",
             "itemtype": "method",
             "name": "addEventListener",
@@ -165,7 +165,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 157,
+            "line": 156,
             "description": "Alias of addEventListener.",
             "itemtype": "method",
             "name": "on",
@@ -173,7 +173,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 164,
+            "line": 163,
             "description": "Removes a single callback from the listener container of the event type.",
             "itemtype": "method",
             "name": "removeEventListener",
@@ -193,7 +193,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 196,
+            "line": 191,
             "description": "Removes all listeners from a single event.",
             "itemtype": "method",
             "name": "removeAllEventListeners",
@@ -208,7 +208,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 220,
+            "line": 211,
             "description": "Access the number of listeners for an event.",
             "itemtype": "method",
             "name": "getEventListenerCount",
@@ -223,9 +223,9 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 244,
+            "line": 229,
             "itemtype": "method",
-            "name": "_addEventCallback",
+            "name": "pipe",
             "params": [
                 {
                     "name": "callback",
@@ -237,9 +237,9 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 260,
+            "line": 245,
             "itemtype": "method",
-            "name": "_removeEventCallback",
+            "name": "unpipe",
             "params": [
                 {
                     "name": "callback",
@@ -251,21 +251,21 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 285,
+            "line": 270,
             "itemtype": "method",
-            "name": "_removeAllEventCallbacks",
+            "name": "unpipeAll",
+            "class": "EventEmitter"
+        },
+        {
+            "file": "src\\EventEmitter.js",
+            "line": 287,
+            "itemtype": "method",
+            "name": "getPipedEventListenerCount",
             "class": "EventEmitter"
         },
         {
             "file": "src\\EventEmitter.js",
             "line": 302,
-            "itemtype": "method",
-            "name": "_getEventCallbackCount",
-            "class": "EventEmitter"
-        },
-        {
-            "file": "src\\EventEmitter.js",
-            "line": 315,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "init",
@@ -273,7 +273,7 @@
         },
         {
             "file": "src\\EventEmitter.js",
-            "line": 324,
+            "line": 311,
             "description": "Used for object pooling.",
             "itemtype": "method",
             "name": "dispose",

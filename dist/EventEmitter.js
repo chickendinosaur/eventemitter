@@ -51,8 +51,11 @@ eventemitter.addEventListener('bang', function(e) {
     console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
-eventemitter.addEventListener(function(e) {
-    console.log(`Event type: ${e.type}`);
+// Ability pipe all events to a listener.
+eventemitter.pipe(function(e) {
+    if(e.type === 'comic'){
+        console.log('Piped the ${e.type} event.');
+    }
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
@@ -84,10 +87,10 @@ function EventEmitter() {
     this._eventListeners = {};
 
     /**
-    @property _eventCallbacks
+    @property _pipedEventListeners
     @type {array}
     */
-    this._eventCallbacks = null;
+    this._pipedEventListeners = null;
 }
 
 EventEmitter.prototype.constructor = EventEmitter;
@@ -115,19 +118,19 @@ EventEmitter.prototype.triggerEvent = function (event) {
         }
     }
 
-    // Run listeners that will get passed every event.
-    if (this._eventCallbacks !== null) {
-        var eventCallbacks = this._eventCallbacks;
+    // Run all piped listeners that will get passed every event.
+    if (this._pipedEventListeners !== null) {
+        var pipedEventListeners = this._pipedEventListeners;
 
-        if (typeof eventCallbacks === 'function') {
-            eventCallbacks.call(this, event);
+        if (typeof pipedEventListeners === 'function') {
+            pipedEventListeners.call(this, event);
         } else {
-            var i = eventCallbacks.length;
+            var i = pipedEventListeners.length;
 
             while (i > 0) {
                 --i;
 
-                eventCallbacks[i].call(this, event);
+                pipedEventListeners[i].call(this, event);
             }
         }
     }
@@ -142,20 +145,16 @@ Creates and new callbacks container (array) if there has not been any callbacks 
 @param {function} callback
 */
 EventEmitter.prototype.addEventListener = function (type, callback) {
-    if (callback === undefined) {
-        this._addEventCallback(type);
-    } else {
-        var eventHandlers = this._eventListeners[type];
+    var eventHandlers = this._eventListeners[type];
 
-        // Create listener container on the fly if there isn't one.
-        // Only reference the callback if it's the first listener.
-        if (eventHandlers === undefined) {
-            this._eventListeners[type] = callback;
-        } else if (typeof eventHandlers === 'function') {
-            this._eventListeners[type] = [eventHandlers, callback];
-        } else {
-            eventHandlers.push(callback);
-        }
+    // Create listener container on the fly if there isn't one.
+    // Only reference the callback if it's the first listener.
+    if (eventHandlers === undefined) {
+        this._eventListeners[type] = callback;
+    } else if (typeof eventHandlers === 'function') {
+        this._eventListeners[type] = [eventHandlers, callback];
+    } else {
+        eventHandlers.push(callback);
     }
 };
 
@@ -174,24 +173,20 @@ Removes a single callback from the listener container of the event type.
 @param {function} callback
 */
 EventEmitter.prototype.removeEventListener = function (type, callback) {
-    if (callback === undefined) {
-        this._removeEventCallback(type);
-    } else {
-        var eventListeners = this._eventListeners[type];
+    var eventListeners = this._eventListeners[type];
 
-        if (eventListeners !== undefined) {
-            if (typeof eventListeners === 'function') {
-                this._eventListeners[type] = undefined;
-            } else {
-                var i = eventListeners.length;
+    if (eventListeners !== undefined) {
+        if (typeof eventListeners === 'function') {
+            this._eventListeners[type] = undefined;
+        } else {
+            var i = eventListeners.length;
 
-                while (i > 0) {
-                    --i;
+            while (i > 0) {
+                --i;
 
-                    if (callback === eventListeners[i]) {
-                        eventListeners.splice(i, 1);
-                        break;
-                    }
+                if (callback === eventListeners[i]) {
+                    eventListeners.splice(i, 1);
+                    break;
                 }
             }
         }
@@ -205,18 +200,14 @@ Removes all listeners from a single event.
 @param {string} type - Event name.
 */
 EventEmitter.prototype.removeAllEventListeners = function (type) {
-    if (type === undefined) {
-        this._removeAllEventCallbacks();
-    } else {
-        var eventListeners = this._eventListeners[type];
+    var eventListeners = this._eventListeners[type];
 
-        if (eventListeners !== undefined) {
-            if (typeof eventListeners === 'function') {
-                this._eventListeners[type] = undefined;
-            } else {
-                while (eventListeners.length > 0) {
-                    eventListeners.pop();
-                }
+    if (eventListeners !== undefined) {
+        if (typeof eventListeners === 'function') {
+            this._eventListeners[type] = undefined;
+        } else {
+            while (eventListeners.length > 0) {
+                eventListeners.pop();
             }
         }
     }
@@ -229,57 +220,49 @@ Access the number of listeners for an event.
 @param {string} type
 */
 EventEmitter.prototype.getEventListenerCount = function (type) {
-    var result = 0;
+    var eventListeners = this._eventListeners[type];
 
-    if (type === undefined) {
-        this._getEventCallbackCount();
-    } else {
-        var eventListeners = this._eventListeners[type];
+    if (eventListeners === undefined) return 0;
 
-        if (typeof eventListeners === 'function') {
-            result = 1;
-        } else if (eventListeners !== undefined) {
-            result = eventListeners.length;
-        }
-    }
+    if (typeof eventListeners === 'function') return 1;
 
-    return result;
+    return eventListeners.length;
 };
 
 /**
-@method _addEventCallback
+@method pipe
 @param {function} callback
 */
-EventEmitter.prototype._addEventCallback = function (callback) {
-    var eventCallbacks = this._eventCallbacks;
+EventEmitter.prototype.pipe = function (callback) {
+    var pipedEventListeners = this._pipedEventListeners;
 
-    if (eventCallbacks === null) {
-        this._eventCallbacks = callback;
-    } else if (typeof eventCallbacks === 'function') {
-        this._eventCallbacks = [eventCallbacks, callback];
+    if (pipedEventListeners === null) {
+        this._pipedEventListeners = callback;
+    } else if (typeof pipedEventListeners === 'function') {
+        this._pipedEventListeners = [pipedEventListeners, callback];
     } else {
-        eventCallbacks.push(callback);
+        pipedEventListeners.push(callback);
     }
 };
 
 /**
-@method _removeEventCallback
+@method unpipe
 @param {function} callback
 */
-EventEmitter.prototype._removeEventCallback = function (callback) {
-    var eventCallbacks = this._eventCallbacks;
+EventEmitter.prototype.unpipe = function (callback) {
+    var pipedEventListeners = this._pipedEventListeners;
 
-    if (eventCallbacks !== null) {
-        if (typeof eventCallbacks === 'function') {
-            this._eventCallbacks = null;
+    if (pipedEventListeners !== null) {
+        if (typeof pipedEventListeners === 'function') {
+            this._pipedEventListeners = null;
         } else {
-            var i = eventCallbacks.length;
+            var i = pipedEventListeners.length;
 
             while (i > 0) {
                 --i;
 
-                if (callback === eventCallbacks[i]) {
-                    eventCallbacks.splice(i, 1);
+                if (callback === pipedEventListeners[i]) {
+                    pipedEventListeners.splice(i, 1);
                     break;
                 }
             }
@@ -288,33 +271,33 @@ EventEmitter.prototype._removeEventCallback = function (callback) {
 };
 
 /**
-@method _removeAllEventCallbacks
+@method unpipeAll
 */
-EventEmitter.prototype._removeAllEventCallbacks = function () {
-    var eventCallbacks = this._eventCallbacks;
+EventEmitter.prototype.unpipeAll = function () {
+    var pipedEventListeners = this._pipedEventListeners;
 
-    if (eventCallbacks !== null) {
-        if (typeof eventCallbacks === 'function') {
-            this._eventCallbacks = null;
+    if (pipedEventListeners !== null) {
+        if (typeof pipedEventListeners === 'function') {
+            this._pipedEventListeners = null;
         } else {
-            while (eventCallbacks.length > 0) {
-                eventCallbacks.pop();
+            while (pipedEventListeners.length > 0) {
+                pipedEventListeners.pop();
             }
         }
     }
 };
 
 /**
-@method _getEventCallbackCount
+@method getPipedEventListenerCount
 */
-EventEmitter.prototype._getEventCallbackCount = function () {
-    var result = 0;
+EventEmitter.prototype.getPipedEventListenerCount = function () {
+    var pipedEventListeners = this._pipedEventListeners;
 
-    if (this._eventCallbacks !== null) {
-        result = this._eventCallbacks.length;
-    }
+    if (pipedEventListeners === null) return 0;
 
-    return result;
+    if (typeof pipedEventListeners === 'function') return 1;
+
+    return pipedEventListeners.length;
 };
 
 /**
@@ -333,5 +316,5 @@ Used for object pooling.
 */
 EventEmitter.prototype.dispose = function () {
     this._eventListeners = null;
-    this._eventCallbacks = null;
+    this._pipedEventListeners = null;
 };

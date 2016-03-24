@@ -118,14 +118,14 @@ describe('EventEmitter', function() {
         });
         // Trigger universal listeners.
         it('Execute universal listeners when only one for an event.', function() {
-            ee.addEventListener(handler1);
+            ee.pipe(handler1);
             ee.triggerEvent(ev1);
             expect(count).toBe(1);
             expect(count2).toBe(10);
         });
         it('Execute all universal listeners when more than one for an event.', function() {
-            ee.addEventListener(handler1);
-            ee.addEventListener(handler1);
+            ee.pipe(handler1);
+            ee.pipe(handler1);
             ee.triggerEvent(ev1);
             expect(count).toBe(2);
             expect(count2).toBe(10);
@@ -134,43 +134,58 @@ describe('EventEmitter', function() {
 
     // Universal event listener tests.
 
-    describe('_addEventCallback', function() {
+    describe('pipe', function() {
         it('Event references a function on one listener.', function() {
-            ee.addEventListener(function() {});
-            expect(typeof ee._eventCallbacks).toBe('function');
+            ee.pipe(function() {});
+            expect(typeof ee._pipedEventListeners).toBe('function');
         });
         it('Event references an array on more than one listener.', function() {
-            ee.addEventListener(function() {});
-            ee.addEventListener(handler1);
-            expect(ee._eventCallbacks.length).toBe(2);
+            ee.pipe(function() {});
+            ee.pipe(handler1);
+            expect(ee._pipedEventListeners.length).toBe(2);
         });
     });
 
-    describe('_removeEventCallback', function() {
+    describe('unpipe', function() {
         it('Resets event handlers for an event back to null on one listener available.', function() {
-            ee.addEventListener(function() {});
-            ee.removeEventListener(handler1);
-            expect(ee._eventCallbacks).toBe(null);
+            ee.pipe(function() {});
+            ee.unpipe(handler1);
+            expect(ee._pipedEventListeners).toBe(null);
         });
         it('Removes single handler from event listeners container.', function() {
-            ee.addEventListener(function() {});
-            ee.addEventListener(handler1);
-            ee.removeEventListener(handler1);
-            expect(ee._eventCallbacks.length).toBe(1);
+            ee.pipe(function() {});
+            ee.pipe(handler1);
+            ee.unpipe(handler1);
+            expect(ee._pipedEventListeners.length).toBe(1);
         });
     });
 
-    describe('removeAllEventListeners', function() {
+    describe('unpipeAll', function() {
         it('Resets event handlers for an event back to null on one listener available.', function() {
-            ee.addEventListener(function() {});
-            ee.removeAllEventListeners();
-            expect(ee._eventCallbacks).toBe(null);
+            ee.pipe(function() {});
+            ee.unpipeAll();
+            expect(ee._pipedEventListeners).toBe(null);
         });
         it('Removes all handlers from event listeners container.', function() {
-            ee.addEventListener(function() {});
-            ee.addEventListener(handler1);
-            ee.removeAllEventListeners();
-            expect(ee._eventCallbacks.length).toBe(0);
+            ee.pipe(function() {});
+            ee.pipe(handler1);
+            ee.unpipeAll();
+            expect(ee._pipedEventListeners.length).toBe(0);
+        });
+    });
+
+    describe('getPipedEventListenerCount', function() {
+        it('Returns the number of listeners if type is Array.', function() {
+            ee.pipe(function() {});
+            ee.pipe(function() {});
+            expect(ee.getPipedEventListenerCount()).toBe(2);
+        });
+        it('Returns the number of listeners if type is Function.', function() {
+            ee.pipe(function() {});
+            expect(ee.getPipedEventListenerCount()).toBe(1);
+        });
+        it('Returns the number of listeners if type is undefined.', function() {
+            expect(ee.getPipedEventListenerCount()).toBe(0);
         });
     });
 });
