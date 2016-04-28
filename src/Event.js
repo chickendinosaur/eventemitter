@@ -26,7 +26,7 @@ SOFTWARE.
 'use strict';
 
 /**
-@example 
+@example
 import Event from '@chickendinosaur/eventemitter/Event';
 
 const pauseEvent = new Event('pause');
@@ -42,17 +42,17 @@ pauseEvent.target = window || this;
 @param {string|number} type
 */
 export default function Event(type) {
-    /**
-    @property type
-    @type {string|number}
-    */
-    this.type = type;
+	/**
+	@property type
+	@type {string|number}
+	*/
+	this.type = type;
 
-    /**
-    @property target
-    @type {object}
-    */
-    this.target = null;
+	/**
+	@property target
+	@type {object}
+	*/
+	this.target = null;
 }
 
 Event.prototype.constructor = Event;
@@ -61,13 +61,13 @@ Event.prototype.constructor = Event;
 @method init
 @param {string|number} type
 */
-Event.prototype.init = function(type) {
-    this.type = type;
+Event.prototype.init = function (type) {
+	this.type = type;
 };
 
 /**
 @method dispose
 */
-Event.prototype.dispose = function() {
+Event.prototype.dispose = function () {
 	this.target = null;
 };

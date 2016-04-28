@@ -27,10 +27,12 @@ SOFTWARE.
 
 /**
 @example
-import EventEmitter from '@chickendinosaur/eventemitter';
-import Event from '@chickendinosaur/eventemitter/Event';
+'use strict';
 
-class ComicEvent extends Event{
+import EventEmitter from '@chickendinosaur/eventemitter';
+import Event from '@chickendinosaur/eventemitter/Event.js';
+
+class ComicEvent extends Event {
 	constructor(type) {
 		super(type);
 
@@ -45,32 +47,32 @@ const comicEvent = new ComicEvent('comic');
 comicEvent.superhero = 'Batman';
 comicEvent.sidekick = 'Robin';
 
-eventemitter.addEventListener('bang', function(e) {
-	console.log(`Callback scope: ${this}`);
-	console.log(`Event: ${e.type}`);
-	console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
+eventemitter.addEventListener('comic', function (event) {
+	console.log(`Callback scope: ${this.constructor.name}`);
+	console.log(`Event: ${event.type}`);
+	console.log(`${event.superhero} (POW!), ${event.sidekick} (BOOM!)`);
 });
 
 // Ability pipe all events to a listener.
-eventemitter.pipe(function(e) {
-	if(e.type === 'comic'){
-		console.log('Piped the ${e.type} event.');
+eventemitter.pipe(function (event) {
+	if (event.type === 'comic') {
+		console.log(`Piped the ${event.type} event.`);
 	}
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
-console.log(`Listener count: ${eventemitter.getPipedEventListenerCount()}`);
+console.log(`Piped listener count: ${eventemitter.getPipedEventListenerCount()}`);
 
 // triggerEvent is meant to take an Event object which should be extended
 // for a custom event or at least contain a 'type' property.
 
-eventemitter.triggerEvent(ev);
+eventemitter.triggerEvent(comicEvent);
 
-eventemitter.removeAllEventListeners('bang');
-eventemitter.triggerEvent(ev);
+eventemitter.removeAllEventListeners('comic');
+eventemitter.triggerEvent(comicEvent);
 
 eventemitter.unpipeAll();
-eventemitter.triggerEvent(ev);
+eventemitter.triggerEvent(comicEvent);
 
 @class EventEmitter
 @constructor
