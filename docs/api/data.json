@@ -33,7 +33,7 @@
             "file": "src\\Event.js",
             "line": 28,
             "example": [
-                " \nimport Event from '@chickendinosaur/eventemitter/Event';\n\nconst pauseEvent = new Event('pause');\npauseEvent.target = window || this;\n\npauseEvent.dispose();\n\npauseEvent.init('pause');\npauseEvent.target = window || this;"
+                "\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nconst pauseEvent = new Event('pause');\npauseEvent.target = window || this;\n\npauseEvent.dispose();\n\npauseEvent.init('pause');\npauseEvent.target = window || this;"
             ],
             "is_constructor": 1,
             "params": [
@@ -55,7 +55,7 @@
             "file": "src\\EventEmitter.js",
             "line": 28,
             "example": [
-                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event';\n\nclass ComicEvent extends Event{\n\tconstructor(type) {\n\t\tsuper(type);\n\n\t\tthis.superhero = 'The Nameless Man';\n\t\tthis.sidekick = null;\n\t}\n}\n\nconst eventemitter = new EventEmitter();\n\nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';\ncomicEvent.sidekick = 'Robin';\n\neventemitter.addEventListener('bang', function(e) {\n\tconsole.log(`Callback scope: ${this}`);\n\tconsole.log(`Event: ${e.type}`);\n\tconsole.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);\n});\n\n// Ability pipe all events to a listener.\neventemitter.pipe(function(e) {\n\tif(e.type === 'comic'){\n\t\tconsole.log('Piped the ${e.type} event.');\n\t}\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\nconsole.log(`Listener count: ${eventemitter.getPipedEventListenerCount()}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(ev);\n\neventemitter.removeAllEventListeners('bang');\neventemitter.triggerEvent(ev);\n\neventemitter.unpipeAll();\neventemitter.triggerEvent(ev);"
+                "\nimport EventEmitter from '@chickendinosaur/eventemitter';\nimport Event from '@chickendinosaur/eventemitter/Event.js';\n\nclass ComicEvent extends Event {\n\tconstructor(type) {\n\t\tsuper(type);\n\n\t\tthis.superhero = 'The Nameless Man';\n\t\tthis.sidekick = null;\n\t}\n}\n\nconst eventemitter = new EventEmitter();\n\nconst comicEvent = new ComicEvent('comic');\ncomicEvent.superhero = 'Batman';\ncomicEvent.sidekick = 'Robin';\n\neventemitter.addEventListener('comic', function (event) {\n\tconsole.log(`Callback scope: ${this.constructor.name}`);\n\tconsole.log(`Event: ${event.type}`);\n\tconsole.log(`${event.superhero} (POW!), ${event.sidekick} (BOOM!)`);\n});\n\n// Ability pipe all events to a listener.\neventemitter.pipe(function (event) {\n\tif (event.type === 'comic') {\n\t\tconsole.log(`Piped the ${event.type} event.`);\n\t}\n});\n\nconsole.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);\nconsole.log(`Piped listener count: ${eventemitter.getPipedEventListenerCount()}`);\n\n// triggerEvent is meant to take an Event object which should be extended\n// for a custom event or at least contain a 'type' property.\n\neventemitter.triggerEvent(comicEvent);\n\neventemitter.removeAllEventListeners('comic');\neventemitter.triggerEvent(comicEvent);\n\neventemitter.unpipeAll();\neventemitter.triggerEvent(comicEvent);"
             ],
             "is_constructor": 1
         }

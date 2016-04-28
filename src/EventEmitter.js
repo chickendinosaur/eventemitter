@@ -27,8 +27,6 @@ SOFTWARE.
 
 /**
 @example
-'use strict';
-
 import EventEmitter from '@chickendinosaur/eventemitter';
 import Event from '@chickendinosaur/eventemitter/Event.js';
 
