@@ -36,31 +36,31 @@ import EventEmitter from '@chickendinosaur/eventemitter';
 import Event from '@chickendinosaur/eventemitter/Event';
 
 class ComicEvent extends Event{
-    constructor(type) {
-        super(type);
+	constructor(type) {
+		super(type);
 
-        this.superhero = 'The Nameless Man';
-        this.sidekick = null;
-    }
+		this.superhero = 'The Nameless Man';
+		this.sidekick = null;
+	}
 }
-     
+
 const eventemitter = new EventEmitter();
-  
+
 const comicEvent = new ComicEvent('comic');
-comicEvent.superhero = 'Batman';  
+comicEvent.superhero = 'Batman';
 comicEvent.sidekick = 'Robin';
 
 eventemitter.addEventListener('bang', function(e) {
-    console.log(`Callback scope: ${this}`);
-    console.log(`Event: ${e.type}`);
-    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
+	console.log(`Callback scope: ${this}`);
+	console.log(`Event: ${e.type}`);
+	console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
 // Ability pipe all events to a listener.
 eventemitter.pipe(function(e) {
-    if(e.type === 'comic'){
-        console.log('Piped the ${e.type} event.');
-    }
+	if(e.type === 'comic'){
+		console.log('Piped the ${e.type} event.');
+	}
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);

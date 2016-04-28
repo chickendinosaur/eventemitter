@@ -31,31 +31,31 @@ import EventEmitter from '@chickendinosaur/eventemitter';
 import Event from '@chickendinosaur/eventemitter/Event';
 
 class ComicEvent extends Event{
-    constructor(type) {
-        super(type);
+	constructor(type) {
+		super(type);
 
-        this.superhero = 'The Nameless Man';
-        this.sidekick = null;
-    }
+		this.superhero = 'The Nameless Man';
+		this.sidekick = null;
+	}
 }
-     
+
 const eventemitter = new EventEmitter();
-  
+
 const comicEvent = new ComicEvent('comic');
-comicEvent.superhero = 'Batman';  
+comicEvent.superhero = 'Batman';
 comicEvent.sidekick = 'Robin';
 
 eventemitter.addEventListener('bang', function(e) {
-    console.log(`Callback scope: ${this}`);
-    console.log(`Event: ${e.type}`);
-    console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
+	console.log(`Callback scope: ${this}`);
+	console.log(`Event: ${e.type}`);
+	console.log(`${e.superhero} (POW!), ${e.sidekick} (BOOM!)`);
 });
 
 // Ability pipe all events to a listener.
 eventemitter.pipe(function(e) {
-    if(e.type === 'comic'){
-        console.log('Piped the ${e.type} event.');
-    }
+	if(e.type === 'comic'){
+		console.log('Piped the ${e.type} event.');
+	}
 });
 
 console.log(`Listener count: ${eventemitter.getEventListenerCount('comic')}`);
@@ -71,91 +71,91 @@ eventemitter.triggerEvent(ev);
 
 eventemitter.unpipeAll();
 eventemitter.triggerEvent(ev);
-      
+
 @class EventEmitter
 @constructor
 */
 export default function EventEmitter() {
-    /**
-    Contains event keys mapped to listeners.
-     
-    @property _eventListeners
-    @type {object}
-    */
-    this._eventListeners = {};
+	/**
+	Contains event keys mapped to listeners.
 
-    /**
-    @property _pipedEventListeners
-    @type {array}
-    */
-    this._pipedEventListeners = null;
+	@property _eventHandlers
+	@type {object}
+	*/
+	this._eventHandlers = {};
+
+	/**
+	@property _pipedEventHandlers
+	@type {array}
+	*/
+	this._pipedEventHandlers = null;
 }
 
 EventEmitter.prototype.constructor = EventEmitter;
 
 /**
 Execute all event listeners tied to the emitted event type.
-    
+
 @method triggerEvent
 @param {Event|object} event
 */
-EventEmitter.prototype.triggerEvent = function(event) {
-    const eventListeners = this._eventListeners[event.type];
+EventEmitter.prototype.triggerEvent = function (event) {
+	const eventHandlers = this._eventHandlers[event.type];
 
-    if (eventListeners !== undefined) {
-        if (typeof eventListeners === 'function') {
-            eventListeners.call(this, event);
-        } else {
-            let n = eventListeners.length;
-            let i = 0;
+	if (eventHandlers !== undefined) {
+		if (eventHandlers.constructor === Function) {
+			eventHandlers.call(this, event);
+		} else {
+			let n = eventHandlers.length;
+			let i = 0;
 
-            while (i < n) {
-                eventListeners[i].call(this, event);
+			while (i < n) {
+				eventHandlers[i].call(this, event);
 
-                ++i;
-            }
-        }
-    }
+				++i;
+			}
+		}
+	}
 
-    // Run all piped listeners that will get passed every event.
-    if (this._pipedEventListeners !== null) {
-        const pipedEventListeners = this._pipedEventListeners;
+	// Run all piped listeners that will get passed every event.
+	if (this._pipedEventHandlers !== null) {
+		const pipedEventHandlers = this._pipedEventHandlers;
 
-        if (typeof pipedEventListeners === 'function') {
-            pipedEventListeners.call(this, event);
-        } else {
-            let n = pipedEventListeners.length;
-            let i = 0;
+		if (pipedEventHandlers.constructor === Function) {
+			pipedEventHandlers.call(this, event);
+		} else {
+			let n = pipedEventHandlers.length;
+			let i = 0;
 
-            while (i < n) {
-                pipedEventListeners[i].call(this, event);
+			while (i < n) {
+				pipedEventHandlers[i].call(this, event);
 
-                ++i;
-            }
-        }
-    }
+				++i;
+			}
+		}
+	}
 };
 
 /**
 Adds a single event callback to the listeners container of the event type.
 Creates and new callbacks container (array) if there has not been any callbacks added to the event yet.
-    
+
 @method addEventListener
 @param {string|number} type
 @param {function} callback
 */
-EventEmitter.prototype.addEventListener = function(type, callback) {
-    let eventHandlers = this._eventListeners[type];
+EventEmitter.prototype.addEventListener = function (type, callback) {
+	let eventHandlers = this._eventHandlers[type];
 
-    // Create listener container on the fly if there isn't one.
-    // Only reference the callback if it's the first listener.
-    if (eventHandlers === undefined) {
-        this._eventListeners[type] = callback;
-    } else if (typeof eventHandlers === 'function') {
-        this._eventListeners[type] = [eventHandlers, callback];
-    } else {
-        eventHandlers.push(callback);
-    }
+	// Create listener container on the fly if there isn't one.
+	// Only reference the callback if it's the first listener.
+	if (eventHandlers === undefined) {
+		this._eventHandlers[type] = callback;
+	} else if (eventHandlers.constructor === Function) {
+		this._eventHandlers[type] = [eventHandlers, callback];
+	} else {
+		eventHandlers.push(callback);
+	}
 };
 
 /**
@@ -167,51 +167,51 @@ EventEmitter.prototype.on = EventEmitter.prototype.addEventListener;
 
 /**
 Removes a single callback from the listener container of the event type.
- 
+
 @method removeEventListener
 @param {string|number} type
 @param {function} callback
 */
-EventEmitter.prototype.removeEventListener = function(type, callback) {
-    const eventListeners = this._eventListeners[type];
+EventEmitter.prototype.removeEventListener = function (type, callback) {
+	const eventHandlers = this._eventHandlers[type];
 
-    if (eventListeners !== undefined) {
-        if (typeof eventListeners === 'function') {
-            this._eventListeners[type] = undefined;
-        } else {
-            let n = eventListeners.length;
-            let i = 0;
+	if (eventHandlers !== undefined) {
+		if (eventHandlers.constructor === Function) {
+			this._eventHandlers[type] = undefined;
+		} else {
+			let n = eventHandlers.length;
+			let i = 0;
 
-            while (i < n) {
-                if (callback === eventListeners[i]) {
-                    eventListeners.splice(i, 1);
-                    break;
-                }
+			while (i < n) {
+				if (callback === eventHandlers[i]) {
+					eventHandlers.splice(i, 1);
+					break;
+				}
 
-                ++i;
-            }
-        }
-    }
+				++i;
+			}
+		}
+	}
 };
 
 /**
 Removes all listeners from a single event.
-    
+
 @method removeAllEventListeners
 @param {string} type - Event name.
 */
-EventEmitter.prototype.removeAllEventListeners = function(type) {
-    const eventListeners = this._eventListeners[type];
+EventEmitter.prototype.removeAllEventListeners = function (type) {
+	const eventHandlers = this._eventHandlers[type];
 
-    if (eventListeners !== undefined) {
-        if (typeof eventListeners === 'function') {
-            this._eventListeners[type] = undefined;
-        } else {
-            while (eventListeners.length > 0) {
-                eventListeners.pop();
-            }
-        }
-    }
+	if (eventHandlers !== undefined) {
+		if (eventHandlers.constructor === Function) {
+			this._eventHandlers[type] = undefined;
+		} else {
+			while (eventHandlers.length > 0) {
+				eventHandlers.pop();
+			}
+		}
+	}
 };
 
 /**
@@ -220,107 +220,111 @@ Access the number of listeners for an event.
 @method getEventListenerCount
 @param {string} type
 */
-EventEmitter.prototype.getEventListenerCount = function(type) {
-    const eventListeners = this._eventListeners[type];
+EventEmitter.prototype.getEventListenerCount = function (type) {
+	const eventHandlers = this._eventHandlers[type];
 
-    if (eventListeners === undefined)
-        return 0;
+	if (eventHandlers === undefined) {
+		return 0;
+	}
 
-    if (typeof eventListeners === 'function')
-        return 1;
+	if (eventHandlers.constructor === Function) {
+		return 1;
+	}
 
-    return eventListeners.length;
+	return eventHandlers.length;
 };
 
 /**
 @method pipe
 @param {function} callback
 */
-EventEmitter.prototype.pipe = function(callback) {
-    const pipedEventListeners = this._pipedEventListeners;
+EventEmitter.prototype.pipe = function (callback) {
+	const pipedEventHandlers = this._pipedEventHandlers;
 
-    if (pipedEventListeners === null) {
-        this._pipedEventListeners = callback;
-    } else if (typeof pipedEventListeners === 'function') {
-        this._pipedEventListeners = [pipedEventListeners, callback];
-    } else {
-        pipedEventListeners.push(callback);
-    }
+	if (pipedEventHandlers === null) {
+		this._pipedEventHandlers = callback;
+	} else if (pipedEventHandlers.constructor === Function) {
+		this._pipedEventHandlers = [pipedEventHandlers, callback];
+	} else {
+		pipedEventHandlers.push(callback);
+	}
 };
 
 /**
 @method unpipe
 @param {function} callback
 */
-EventEmitter.prototype.unpipe = function(callback) {
-    const pipedEventListeners = this._pipedEventListeners;
+EventEmitter.prototype.unpipe = function (callback) {
+	const pipedEventHandlers = this._pipedEventHandlers;
 
-    if (pipedEventListeners !== null) {
-        if (typeof pipedEventListeners === 'function') {
-            this._pipedEventListeners = null;
-        } else {
-            let n = pipedEventListeners.length;
-            let i = 0;
+	if (pipedEventHandlers !== null) {
+		if (pipedEventHandlers.constructor === Function) {
+			this._pipedEventHandlers = null;
+		} else {
+			let n = pipedEventHandlers.length;
+			let i = 0;
 
-            while (i < n) {
-                if (callback === pipedEventListeners[i]) {
-                    pipedEventListeners.splice(i, 1);
-                    break;
-                }
+			while (i < n) {
+				if (callback === pipedEventHandlers[i]) {
+					pipedEventHandlers.splice(i, 1);
+					break;
+				}
 
-                ++i;
-            }
-        }
-    }
+				++i;
+			}
+		}
+	}
 };
 
 /**
 @method unpipeAll
 */
-EventEmitter.prototype.unpipeAll = function() {
-    const pipedEventListeners = this._pipedEventListeners;
+EventEmitter.prototype.unpipeAll = function () {
+	const pipedEventHandlers = this._pipedEventHandlers;
 
-    if (pipedEventListeners !== null) {
-        if (typeof pipedEventListeners === 'function') {
-            this._pipedEventListeners = null;
-        } else {
-            while (pipedEventListeners.length > 0) {
-                pipedEventListeners.pop();
-            }
-        }
-    }
+	if (pipedEventHandlers !== null) {
+		if (pipedEventHandlers.constructor === Function) {
+			this._pipedEventHandlers = null;
+		} else {
+			while (pipedEventHandlers.length > 0) {
+				pipedEventHandlers.pop();
+			}
+		}
+	}
 };
 
 /**
 @method getPipedEventListenerCount
 */
-EventEmitter.prototype.getPipedEventListenerCount = function() {
-    const pipedEventListeners = this._pipedEventListeners;
+EventEmitter.prototype.getPipedEventListenerCount = function () {
+	const pipedEventHandlers = this._pipedEventHandlers;
 
-    if (pipedEventListeners === null)
-        return 0;
+	if (pipedEventHandlers === null) {
+		return 0;
+	}
 
-    if (typeof pipedEventListeners === 'function')
-        return 1;
+	if (pipedEventHandlers.constructor === Function) {
+		return 1;
+	}
 
-    return pipedEventListeners.length;
+	return pipedEventHandlers.length;
 };
 
 /**
 Used for object pooling.
-    
+
 @method init
 */
-EventEmitter.prototype.init = function() {
-    this._eventListeners = {};
+EventEmitter.prototype.init = function () {
+	this._eventHandlers = {};
 };
 
 /**
 Used for object pooling.
- 
+
 @method dispose
 */
-EventEmitter.prototype.dispose = function() {
-    this._eventListeners = null;
-    this._pipedEventListeners = null;
+EventEmitter.prototype.dispose = function () {
+	this._eventHandlers = null;
+	this._pipedEventHandlers = null;
 };
